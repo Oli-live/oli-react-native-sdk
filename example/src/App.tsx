@@ -1,18 +1,13 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'oli-react-native-sdk';
+import { OliSdk } from 'oli-react-native-sdk';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-  }, []);
-
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text>#FicaMarcelinha</Text>
+      <OliSdk id="7ad8804c-b249-444a-b71e-1d53f9087b4e" />
     </View>
   );
 }
