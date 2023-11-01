@@ -11,16 +11,12 @@ npm install oli-react-native-sdk
 ## Usage
 
 ```js
-import { multiply } from 'oli-react-native-sdk';
+import { OliSdk } from 'oli-react-native-sdk';
 
 // ...
 
-const result = await multiply(3, 7);
+<OliSdk id="your-enterprise-id" />;
 ```
-
-## Contributing
-
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
 
 ## License
 
