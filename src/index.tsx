@@ -17,15 +17,15 @@ type OliSdkProps = {
 
 export function OliSdk({ id }: OliSdkProps) {
   const [size, setSize] = useState({
-    height: 150,
-    width: 150,
+    height: 210,
+    width: 110,
   });
 
   const handleLayoutChange = (event: WebViewMessageEvent) => {
     if (event.nativeEvent.data === 'pip') {
       setSize({
-        height: 150,
-        width: 150,
+        height: 210,
+        width: 110,
       });
     } else if (event.nativeEvent.data === 'full') {
       setSize({
