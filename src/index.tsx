@@ -53,7 +53,7 @@ export function OliSdk({ id }: OliSdkProps) {
     <SafeAreaView style={containerStyle}>
       <WebView
         allowsInlineMediaPlayback
-        originWhitelist={['*']}
+        originWhitelist={['*', 'https://']}
         webviewDebuggingEnabled={true}
         scalesPageToFit={false}
         style={webviewStyle}
