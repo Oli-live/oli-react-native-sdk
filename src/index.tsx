@@ -15,7 +15,7 @@ type OliSdkProps = {
   id: string;
 };
 
-export function OliSdk({ id }: OliSdkProps) {
+export function OliSdk(props: OliSdkProps) {
   const [size, setSize] = useState({
     height: 210,
     width: 110,
@@ -65,7 +65,9 @@ export function OliSdk({ id }: OliSdkProps) {
         style={webviewStyle}
         onMessage={handleLayoutChange}
         source={{
-          uri: `https://share.oli.video/webview/${id}`,
+          uri: `https://share.oli.video/webview/${
+            props.id
+          }?${new URLSearchParams(props)}`,
         }}
       />
     </SafeAreaView>
