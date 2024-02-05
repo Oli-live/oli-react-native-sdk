@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Dimensions, SafeAreaView } from 'react-native';
 import { WebView, type WebViewMessageEvent } from 'react-native-webview';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -10,6 +11,7 @@ type OliSdkProps = {
 };
 
 export function OliSdk(props: OliSdkProps) {
+  const [storage, setStorage] = useState<any>(null);
   const [size, setSize] = useState({
     height: 210,
     width: 110,
@@ -75,6 +77,21 @@ export function OliSdk(props: OliSdkProps) {
     }
   }, [props.id]);
 
+  const getData = async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      const result = await AsyncStorage.multiGet(keys);
+
+      if (result) setStorage(result);
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   useEffect(() => {
     getInitialData();
   }, [getInitialData]);
@@ -91,7 +108,7 @@ export function OliSdk(props: OliSdkProps) {
         source={{
           uri: `https://share.oli.video/webview/${
             props.id
-          }?${new URLSearchParams(props)}`,
+          }?${new URLSearchParams({ ...storage, ...props })}`,
         }}
       />
     </SafeAreaView>
