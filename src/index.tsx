@@ -1,11 +1,5 @@
-import React from 'react';
-import { useState } from 'react';
-import {
-  Dimensions,
-  SafeAreaView,
-  type StyleProp,
-  type ViewStyle,
-} from 'react-native';
+import React, { useCallback, useState, useEffect } from 'react';
+import { Dimensions, SafeAreaView } from 'react-native';
 import { WebView, type WebViewMessageEvent } from 'react-native-webview';
 
 const windowWidth = Dimensions.get('window').width;
@@ -20,46 +14,76 @@ export function OliSdk(props: OliSdkProps) {
     height: 210,
     width: 110,
   });
-
-  const handleLayoutChange = (event: WebViewMessageEvent) => {
-    if (event.nativeEvent.data === 'pip') {
-      setSize({
-        height: 210,
-        width: 110,
-      });
-    } else if (event.nativeEvent.data === 'full') {
-      setSize({
-        height: windowHeight,
-        width: windowWidth,
-      });
-    }
-  };
-
-  const containerStyle: StyleProp<ViewStyle> = {
+  const [origin, setOrigin] = useState([
+    'http://*',
+    'https://*',
+    'intent://*',
+    'tel:*',
+    'mailto:*',
+  ]);
+  const [webviewStyle, setWebviewStyle] = useState<any>({
+    height: 210,
+    width: 110,
+    backgroundColor: 'transparent',
+  });
+  const [containerStyle, setContainerStyle] = useState<any>({
     position: 'absolute',
     bottom: 0,
     right: 0,
-    width: size.width,
-    height: size.height,
+    height: 210,
+    width: 110,
+    zIndex: 2147483647,
+  });
+
+  const handleLayoutChange = (event: WebViewMessageEvent) => {
+    let newSize = size;
+    if (event.nativeEvent.data === 'pip') {
+      newSize = size;
+    } else if (event.nativeEvent.data === 'full') {
+      newSize = {
+        height: windowHeight,
+        width: windowWidth,
+      };
+    }
+    setWebviewStyle({
+      ...webviewStyle,
+      ...newSize,
+    });
+    setContainerStyle({
+      ...containerStyle,
+      ...newSize,
+    });
   };
 
-  const webviewStyle: StyleProp<ViewStyle> = {
-    height: size.height,
-    width: size.width,
-    backgroundColor: 'transparent',
-  };
+  const getInitialData = useCallback(async () => {
+    const data: any = await fetch(
+      `https://api.oli.services/oli-api/config/${props.id}`
+    );
+    const response = await data.json();
+    if (response?.configs?.origin?.length) {
+      setOrigin(response?.configs?.origin);
+    }
+    if (response?.configs?.webviewStyle) {
+      setWebviewStyle(response?.configs?.webviewStyle);
+      setSize({
+        height: response?.configs?.webviewStyle?.height,
+        width: response?.configs?.webviewStyle?.width,
+      });
+    }
+    if (response?.configs?.containerStyle) {
+      setContainerStyle(response?.configs?.containerStyle);
+    }
+  }, [props.id]);
+
+  useEffect(() => {
+    getInitialData();
+  }, [getInitialData]);
 
   return (
     <SafeAreaView style={containerStyle}>
       <WebView
         allowsInlineMediaPlayback
-        originWhitelist={[
-          'http://*',
-          'https://*',
-          'intent://*',
-          'tel:*',
-          'mailto:*',
-        ]}
+        originWhitelist={origin}
         webviewDebuggingEnabled={true}
         scalesPageToFit={false}
         style={webviewStyle}

@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
 
 import { useState } from 'react';
@@ -10,7 +11,12 @@ export default function App() {
     <View style={styles.container}>
       <Text>#FicaMarcelinha</Text>
       <Text onPress={() => setClicks(clicks + 1)}>Cliques: {clicks}</Text>
-      <OliSdk id="7ad8804c-b249-444a-b71e-1d53f9087b4e" />
+      <View style={styles.navbar}>
+        <Text style={{ color: '#FFFFFF', marginLeft: 16 }}>Home</Text>
+        <Text style={{ color: '#FFFFFF', marginLeft: 16 }}>Perfil</Text>
+        <Text style={{ color: '#FFFFFF', marginLeft: 16 }}>Produtos</Text>
+      </View>
+      <OliSdk id="5ee469e0-b545-46c3-92b5-452a50bc9b79" />
     </View>
   );
 }
@@ -25,5 +31,18 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     marginVertical: 20,
+  },
+  navbar: {
+    display: 'flex',
+    gap: 16,
+    fontSize: '18px',
+    width: '100%',
+    flexDirection: 'row',
+    padding: 16,
+    marginBottom: 32,
+    backgroundColor: '#396FF2',
+    zIndex: 99,
+    position: 'absolute',
+    bottom: 0,
   },
 });
